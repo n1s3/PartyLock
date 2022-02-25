@@ -1,0 +1,22 @@
+name: PartyLock
+version: '${project.version}'
+main: com.theodorew.partylock.Main
+api-version: 1.18
+prefix: PartyLock
+depend: [ Parties, NBTAPI ]
+authors: [ theodorew, N1SE ]
+description: Create locked containers shared by parties
+website: theodorew.com
+commands:
+  lock:
+    description: Lock valid containers by party
+    permission: partylock.lock
+    usage: Look at a valid container and type /lock
+  unlock:
+    description: Unlock an already locked container
+    permission: partylock.unlock
+    usage: Look at a valid container and type /unlock
+  mlock:
+    description: Multi lock tool, lock multiple containers quickly
+    permission: partylock.mlock
+    usage: Activate with /mlock, then left click all valid containers to lock, then right click to finish
