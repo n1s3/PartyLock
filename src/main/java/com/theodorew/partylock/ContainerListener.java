@@ -71,9 +71,9 @@ public class ContainerListener implements Listener {
                         NBTTileEntity tent = new NBTTileEntity(e.getClickedBlock().getState());
                         if (!checkKey(player, e.getClickedBlock())) {
                             tent.setString("Lock", pl.getAPI().getPartyPlayer(player.getUniqueId()).getPartyName());
-                            player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_GREEN + " is now locked!");
+                            player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_GREEN + ChatColor.BOLD + " locked!");
                         } else {
-                            player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_RED + " is already locked!");
+                            player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_RED + ChatColor.BOLD + " already locked!");
                         }
                     }
                 }
@@ -116,6 +116,6 @@ public class ContainerListener implements Listener {
         if (!tmp.contains(player.getUniqueId())) { return; }
         tmp.remove(player.getUniqueId());
         pl.setMultiLockEnabled(tmp);
-        player.sendMessage(pl.getPrefix() + ChatColor.GRAY + " is now disabled");
+        player.sendMessage(pl.getPrefix() + ChatColor.GRAY + ChatColor.BOLD + "Disabled!");
     }
 }

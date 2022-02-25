@@ -32,7 +32,7 @@ public class UnLock implements CommandExecutor {
                     if (unLock(block)) {
                         player.sendMessage(ChatColor.DARK_GREEN + "Unlocked successfully!");
                     } else {
-                        player.sendMessage(ChatColor.DARK_RED + "This chest isn't locked, so it can't be unlocked.");
+                        player.sendMessage(ChatColor.DARK_RED + "This container isn't locked, so it can't be unlocked.");
                     }
                 }
             }

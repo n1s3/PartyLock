@@ -28,10 +28,10 @@ public class MLock extends Lock implements CommandExecutor {
                 ArrayList<UUID> tmp = pl.getMultiLockEnabled();
                 tmp.add(player.getUniqueId());
                 pl.setMultiLockEnabled(tmp);
-                player.sendMessage(pl.getPrefix() + ChatColor.DARK_GREEN + " mode enabled...");
+                player.sendMessage(pl.getPrefix() + ChatColor.DARK_GREEN + ChatColor.BOLD + "Enabled!");
             } else {
-                player.sendMessage(pl.getPrefix() + ChatColor.DARK_RED + " already enabled.");
-                player.sendMessage(pl.getPrefix() + ChatColor.DARK_RED + " right click any block to finish and exit.");
+                player.sendMessage(pl.getPrefix() + ChatColor.DARK_RED + "already enabled.");
+                player.sendMessage(pl.getPrefix() + ChatColor.DARK_RED + "right click any block to finish and exit.");
             }
         }
         return true;
