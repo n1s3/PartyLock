@@ -6,9 +6,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 public final class Main extends JavaPlugin {
 
     private PartiesAPI api;
+    private ArrayList<UUID> multiLockEnabled = new ArrayList<UUID>();
+    private static final String prefix = ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "MULTI LOCK" + ChatColor.GRAY + ChatColor.BOLD + "] " + ChatColor.RESET;
 
     //TODO
     //Double chest locking
@@ -33,6 +38,7 @@ public final class Main extends JavaPlugin {
         }
         this.getCommand("lock").setExecutor(new Lock(this));
         this.getCommand("unlock").setExecutor(new UnLock(this));
+        this.getCommand("mlock").setExecutor(new MLock(this));
         getServer().getPluginManager().registerEvents(new ContainerListener(this), this);
     }
 
@@ -51,12 +57,18 @@ public final class Main extends JavaPlugin {
         getLogger().info(msg);
     }
 
-    public PartiesAPI getAPI() {
-        return api;
-    }
-
     @Override
     public void onDisable() {
         print(ChatColor.GOLD + "Goodbye!");
     }
+
+    public String getPrefix() { return prefix; }
+
+    public PartiesAPI getAPI() {
+        return this.api;
+    }
+
+    public ArrayList<UUID> getMultiLockEnabled() { return this.multiLockEnabled; }
+
+    public void setMultiLockEnabled(ArrayList<UUID> multiLockEnabled) { this.multiLockEnabled = multiLockEnabled; }
 }

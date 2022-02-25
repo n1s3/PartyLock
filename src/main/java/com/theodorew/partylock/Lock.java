@@ -45,4 +45,7 @@ public class Lock implements CommandExecutor {
         NBTTileEntity tent = new NBTTileEntity(block.getState());
         tent.setString("Lock", api.getPartyPlayer(player.getUniqueId()).getPartyName());
     }
+
+    public Main getMain() { return pl; }
+
 }

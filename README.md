@@ -4,4 +4,4 @@ Simple plugin allowing party members to lock containers and share with other mem
 
 * Containers cannot be locked by party-less players.
 * Other parties are denied access and cannot break locked containers.
-* Disbanded party containers are unlocked automaticaly.
+* Disbanded party containers are unlocked automatically.
