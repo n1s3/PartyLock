@@ -23,6 +23,7 @@ public class ContainerListener implements Listener {
     }
 
     @EventHandler
+    //Re-lock container on close, if it was previously locked
     public void onContainerClose(InventoryCloseEvent e) {
         if (e.getInventory().getHolder() instanceof BlockInventoryHolder) {
             BlockInventoryHolder holder = (BlockInventoryHolder) e.getInventory().getHolder();
@@ -38,28 +39,32 @@ public class ContainerListener implements Listener {
     }
 
     @EventHandler
+    //Unlock chest when valid player opens
     public void onContainerOpen(PlayerInteractEvent e) {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
             if (isLocked(e.getClickedBlock())) {
                 NBTTileEntity tent = new NBTTileEntity(e.getClickedBlock().getState());
+                NBTCompound comp = tent.getPersistentDataContainer();
                 if (isActiveParty(tent.getString("Lock"))) {
                     if (checkKey(e.getPlayer(), e.getClickedBlock())) {
                         tent.setString("Lock", "");
-                        NBTCompound comp = tent.getPersistentDataContainer();
                         comp.setBoolean("wasLocked", true);
                     }
                 } else {
+                    //Unlock if party disbanded
                     tent.setString("Lock", "");
+                    comp.setBoolean("wasLocked", false);
                 }
             }
         }
     }
 
     @EventHandler
+    //Prevent breaking a locked container
     public void onBlockBreak(BlockBreakEvent e) {
         if (e.getBlock() instanceof Container) {
             NBTTileEntity tent = new NBTTileEntity(e.getBlock().getState());
-            if (isActiveParty(tent.getString("Lock"))) {
+            if (isActiveParty(tent.getString("Lock"))) { //Allow container to be broken if party disbanded
                 e.setCancelled(isLocked(e.getBlock()));
             }
         }
@@ -77,6 +82,7 @@ public class ContainerListener implements Listener {
         return pl.getAPI().getParty(otherParty) != null;
     }
 
+    //Check if player party equals container owner party (key container is locked with)
     private boolean checkKey(Player player, Block block) {
         Lockable lockable = (Lockable) block.getState();
         return lockable.getLock().equals(pl.getAPI().getPartyPlayer(player.getUniqueId()).getPartyName());
