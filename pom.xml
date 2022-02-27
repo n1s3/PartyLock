@@ -6,7 +6,7 @@
 
     <groupId>com.theodorew</groupId>
     <artifactId>PartyLock</artifactId>
-    <version>pre-1.2.3</version>
+    <version>pre-1.3</version>
     <packaging>jar</packaging>
 
     <name>PartyLock</name>
