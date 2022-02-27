@@ -1,10 +1,11 @@
 package com.theodorew.partylock;
 
+import com.alessiodp.parties.api.interfaces.PartiesAPI;
+import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import de.tr7zw.nbtapi.NBTCompound;
 import de.tr7zw.nbtapi.NBTTileEntity;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
-import org.bukkit.block.Container;
 import org.bukkit.block.Lockable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,9 +21,11 @@ import java.util.UUID;
 public class ContainerListener implements Listener {
 
     private final Main pl;
+    private final PartiesAPI api;
 
     public ContainerListener(Main pl) {
         this.pl = pl;
+        this.api = pl.getAPI();
     }
 
     @EventHandler
@@ -34,7 +37,7 @@ public class ContainerListener implements Listener {
                 NBTTileEntity tent = new NBTTileEntity(holder.getBlock().getState());
                 NBTCompound comp = tent.getPersistentDataContainer();
                 if (comp.getBoolean("wasLocked")) {
-                    tent.setString("Lock", pl.getAPI().getPartyPlayer(e.getPlayer().getUniqueId()).getPartyName());
+                    tent.setString("Lock", api.getPartyPlayer(e.getPlayer().getUniqueId()).getPartyName());
                     comp.setBoolean("wasLocked", false);
                 }
             }
@@ -70,7 +73,7 @@ public class ContainerListener implements Listener {
                         String blockName =  ChatColor.GOLD + "" + ChatColor.ITALIC + e.getClickedBlock().getType();
                         NBTTileEntity tent = new NBTTileEntity(e.getClickedBlock().getState());
                         if (!checkKey(player, e.getClickedBlock())) {
-                            tent.setString("Lock", pl.getAPI().getPartyPlayer(player.getUniqueId()).getPartyName());
+                            tent.setString("Lock", api.getPartyPlayer(player.getUniqueId()).getPartyName());
                             player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_GREEN + ChatColor.BOLD + " locked!");
                         } else {
                             player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_RED + ChatColor.BOLD + " already locked!");
@@ -82,15 +85,22 @@ public class ContainerListener implements Listener {
     }
 
     @EventHandler
-    //Prevent breaking a locked container
+    //Prevent breaking a locked container if player isn't within the owning party
     public void onBlockBreak(BlockBreakEvent e) {
-        if (e.getBlock() instanceof Container) {
-            NBTTileEntity tent = new NBTTileEntity(e.getBlock().getState());
-            ArrayList<UUID> tmp = pl.getMultiLockEnabled();
-            if (isActiveParty(tent.getString("Lock")) || tmp.contains(e.getPlayer().getUniqueId())) { //Deny container to be broken
-                e.setCancelled(isLocked(e.getBlock()));
+        Block block = e.getBlock();
+        Player player = e.getPlayer();
+        if (isLocked(block)) {
+            if (!checkKey(player, block)) {
+                if(isActiveParty(player)) {
+                    e.setCancelled(true);
+                }
             }
         }
+    }
+
+    private boolean checkKey(Player player, Block block) {
+        NBTTileEntity tent = new NBTTileEntity(block.getState());
+        return tent.getString("Lock").equals(api.getPartyPlayer(player.getUniqueId()).getPartyName());
     }
 
     private boolean isLocked(Block block) {
@@ -101,14 +111,13 @@ public class ContainerListener implements Listener {
         return false;
     }
 
-    private boolean isActiveParty(String otherParty) {
-        return pl.getAPI().getParty(otherParty) != null;
+    private boolean isActiveParty(String party) {
+        return api.getParty(party) != null;
     }
 
-    //Check if player party equals container owner party (key container is locked with)
-    private boolean checkKey(Player player, Block block) {
-        Lockable lockable = (Lockable) block.getState();
-        return lockable.getLock().equals(pl.getAPI().getPartyPlayer(player.getUniqueId()).getPartyName());
+    private boolean isActiveParty(Player player) {
+        PartyPlayer partyPlayer = api.getPartyPlayer(player.getUniqueId());
+        return api.getParty(partyPlayer.getPartyName()) != null;
     }
 
     private void cancelMultiLock(Player player) {

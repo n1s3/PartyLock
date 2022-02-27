@@ -6,7 +6,7 @@
 
     <groupId>com.theodorew</groupId>
     <artifactId>PartyLock</artifactId>
-    <version>1.2.1</version>
+    <version>pre-1.2.3</version>
     <packaging>jar</packaging>
 
     <name>PartyLock</name>
@@ -20,6 +20,14 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <outputDirectory>/Users/n1se/Documents/minecraft/test_env/plugins</outputDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
