@@ -1,5 +1,5 @@
 # PartyLock
-**Pre-release Ver. 0.1.x**
+**Pre-release Ver. 1.3**
 
 ### Simple plugin allowing party members to lock containers and share with other members only.
 
