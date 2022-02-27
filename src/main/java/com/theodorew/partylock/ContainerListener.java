@@ -48,14 +48,15 @@ public class ContainerListener implements Listener {
     //Unlock chest when valid player opens
     public void onPlayerInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
+        Block block = e.getClickedBlock();
         switch (e.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 cancelMultiLock(player);
-                if (isLocked(e.getClickedBlock())) {
-                    NBTTileEntity tent = new NBTTileEntity(e.getClickedBlock().getState());
+                if (isLocked(block)) {
+                    NBTTileEntity tent = new NBTTileEntity(block.getState());
                     NBTCompound comp = tent.getPersistentDataContainer();
                     if (isActiveParty(tent.getString("Lock"))) {
-                        if (checkKey(player, e.getClickedBlock())) {
+                        if (checkKey(player, block)) {
                             tent.setString("Lock", "");
                             comp.setBoolean("wasLocked", true);
                         }
@@ -68,15 +69,15 @@ public class ContainerListener implements Listener {
                 break;
             case LEFT_CLICK_BLOCK:
                 //Lock if block is container and player is in multi lock mode
-                if (pl.validContainer(e.getClickedBlock())) {
+                if (pl.validContainer(block)) {
                     if (pl.getMultiLockEnabled().contains(player.getUniqueId())) {
-                        String blockName =  ChatColor.GOLD + "" + ChatColor.ITALIC + e.getClickedBlock().getType();
-                        NBTTileEntity tent = new NBTTileEntity(e.getClickedBlock().getState());
-                        if (!checkKey(player, e.getClickedBlock())) {
+                        String blockName =  ChatColor.GOLD + "" + ChatColor.ITALIC + block.getType();
+                        NBTTileEntity tent = new NBTTileEntity(block.getState());
+                        if (!checkKey(player, block)) {
                             tent.setString("Lock", api.getPartyPlayer(player.getUniqueId()).getPartyName());
-                            player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_GREEN + ChatColor.BOLD + " locked!");
+                            player.sendMessage(pl.multiLockPrefix(blockName + ChatColor.DARK_GREEN + ChatColor.BOLD + " locked!"));
                         } else {
-                            player.sendMessage(pl.getPrefix() + blockName + ChatColor.DARK_RED + ChatColor.BOLD + " already locked!");
+                            player.sendMessage(pl.multiLockPrefix(blockName + ChatColor.DARK_RED + ChatColor.BOLD + " already locked!"));
                         }
                     }
                 }
@@ -127,6 +128,6 @@ public class ContainerListener implements Listener {
         if (!tmp.contains(player.getUniqueId())) { return; }
         tmp.remove(player.getUniqueId());
         pl.setMultiLockEnabled(tmp);
-        player.sendMessage(pl.getPrefix() + ChatColor.GRAY + ChatColor.BOLD + "Disabled!");
+        player.sendMessage(pl.multiLockPrefix(ChatColor.GRAY + "" + ChatColor.BOLD + "Disabled!"));
     }
 }

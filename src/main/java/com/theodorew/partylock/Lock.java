@@ -28,10 +28,10 @@ public class Lock implements CommandExecutor {
                 Block block = player.getTargetBlock(5);
                 if (pl.validContainer(block)) {
                     lockBlock(block, player);
-                    player.sendMessage(ChatColor.DARK_GREEN + "Locked successfully!");
+                    player.sendMessage(pl.lockPrefix(ChatColor.DARK_GREEN + "Locked successfully!"));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + "You need to be in a party to lock containers...");
+                player.sendMessage(pl.lockPrefix(ChatColor.RED + "You need to be in a party to lock containers..."));
             }
         } else {
             //Console sent cmd

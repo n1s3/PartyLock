@@ -23,15 +23,17 @@ public class MLock extends Lock implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if(sender instanceof Player) {
             Player player = (Player) sender;
-            if (!pl.getMultiLockEnabled().contains(player.getUniqueId())) {
-                //Enable mlock
-                ArrayList<UUID> tmp = pl.getMultiLockEnabled();
-                tmp.add(player.getUniqueId());
-                pl.setMultiLockEnabled(tmp);
-                player.sendMessage(pl.getPrefix() + ChatColor.DARK_GREEN + ChatColor.BOLD + "Enabled!");
-            } else {
-                player.sendMessage(pl.getPrefix() + ChatColor.DARK_RED + "already enabled.");
-                player.sendMessage(pl.getPrefix() + ChatColor.DARK_RED + "right click any block to finish and exit.");
+            if (pl.getAPI().isPlayerInParty(player.getUniqueId())) {
+                if (!pl.getMultiLockEnabled().contains(player.getUniqueId())) {
+                    ArrayList<UUID> tmp = pl.getMultiLockEnabled();
+                    tmp.add(player.getUniqueId());
+                    pl.setMultiLockEnabled(tmp);
+                    player.sendMessage(pl.multiLockPrefix(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Enabled!"));
+                } else {
+                    player.sendMessage(pl.multiLockPrefix(ChatColor.DARK_RED + "Disabled!"));
+                }
+             } else {
+                player.sendMessage(pl.multiLockPrefix(ChatColor.RED + "You need to be in a party to lock containers"));
             }
         }
         return true;

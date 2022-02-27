@@ -13,11 +13,11 @@ public final class Main extends JavaPlugin {
 
     private PartiesAPI api;
     private ArrayList<UUID> multiLockEnabled = new ArrayList<UUID>();
-    private static final String prefix = ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.DARK_AQUA + ChatColor.BOLD + "MULTI LOCK" + ChatColor.GRAY + ChatColor.BOLD + "] " + ChatColor.RESET;
+    private static final String multi_lock_prefix = ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.DARK_AQUA + ChatColor.BOLD + "MULTI LOCK" + ChatColor.GRAY + ChatColor.BOLD + "] " + ChatColor.RESET;
+    private static final String lock_prefix = ChatColor.GRAY + "" + ChatColor.BOLD + "[" + ChatColor.DARK_AQUA + ChatColor.BOLD + "LOCK" + ChatColor.GRAY + ChatColor.BOLD + "] " + ChatColor.RESET;
 
     //TODO
     //Double chest locking
-    //Multi lock -- lock multiple chests at once with a punch
 
     @Override
     public void onEnable() {
@@ -53,6 +53,10 @@ public final class Main extends JavaPlugin {
         return false;
     }
 
+    public String lockPrefix(String string) { return lock_prefix + string; }
+
+    public String multiLockPrefix(String string) { return multi_lock_prefix + string; }
+
     public void print(String msg){
         getLogger().info(msg);
     }
@@ -61,8 +65,6 @@ public final class Main extends JavaPlugin {
     public void onDisable() {
         print(ChatColor.GOLD + "Goodbye!");
     }
-
-    public String getPrefix() { return prefix; }
 
     public PartiesAPI getAPI() {
         return this.api;
