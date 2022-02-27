@@ -89,12 +89,12 @@ public class ContainerListener implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         Block block = e.getBlock();
         Player player = e.getPlayer();
-        if (pl.getMultiLockEnabled().contains(player.getUniqueId())) { // Prevent breaking when in multi lock mode
-            if (isLocked(block)) {
-                if (!checkKey(player, block)) {
-                    if (isActiveParty(player)) {
-                        e.setCancelled(true);
-                    }
+        //Disable block breaking when multi lock mode is enabled
+        if (pl.getMultiLockEnabled().contains(player.getUniqueId())) { e.setCancelled(true); return; }
+        if (isLocked(block)) {
+            if (!checkKey(player, block)) {
+                if(isActiveParty(player)) {
+                    e.setCancelled(true);
                 }
             }
         }
